@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Double-Host · 授权回调</title><style>
+body{font:16px/1.6 -apple-system,system-ui,sans-serif;max-width:640px;margin:60px auto;padding:0 20px;background:#0d1117;color:#e6edf3;text-align:center}
+.code{font:18px ui-monospace,monospace;word-break:break-all;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px;margin:20px 0;color:#7ee787}
+button{padding:10px 20px;border:0;border-radius:8px;background:#238636;color:#fff;font:inherit;cursor:pointer}
+.err{color:#f85149}</style></head><body>
+<h2>EvoMap 授权回调</h2>
+<div id="msg">读取授权码中…</div>
+<script>
+const p = new URLSearchParams(location.search);
+const code = p.get('code'), err = p.get('error'), state = p.get('state');
+const msg = document.getElementById('msg');
+if (err) {
+  msg.innerHTML = '<p class="err">授权出错：' + err + '<br>' + (p.get('error_description')||'') + '</p>';
+} else if (code) {
+  msg.innerHTML = '<p>✅ 授权成功。把下面这段授权码复制，粘贴回助手：</p>'
+    + '<div class="code" id="c">' + code + '</div>'
+    + '<button onclick="navigator.clipboard.writeText(document.getElementById(\'c\').innerText).then(()=>this.innerText=\'已复制\')">复制授权码</button>'
+    + '<p style="color:#8b949e;font-size:13px">state: ' + (state||'') + '</p>';
+} else {
+  msg.innerHTML = '<p class="err">URL 里没有 code。请从授权链接进来。</p>';
+}
+</script></body></html>
